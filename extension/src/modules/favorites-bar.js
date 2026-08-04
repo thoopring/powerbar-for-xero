@@ -64,11 +64,54 @@ XT.register({
     nav.after(this._bar);
   },
 
-  // Xero titles read "Invoices | Demo Company (AU) | Xero" (and the older
-  // pages use en dashes), so keep the leading segment only.
+  // Naming a pin is harder than it looks. Xero uses two title formats —
+  // legacy pages put the brand first ("Xero | Invoices | Demo Company (AU)"),
+  // the app shell puts it last ("Bank accounts – Demo Company (AU) – Xero") —
+  // and some titles are useless on their own ("All" for the bills list).
+  //
+  // So ask the nav first: it already names every page it links to, in the
+  // user's own language, and it includes the entries we injected, which is how
+  // a pinned "Draft" ends up called Draft rather than Invoices.
   pageLabel() {
-    const first = document.title.split(/\s*[|–—]\s*/)[0].trim();
-    return first || location.pathname;
+    return this.labelFromNav() || this.labelFromTitle() || location.pathname;
+  },
+
+  labelFromNav() {
+    const nav = document.querySelector(XT.selectors.nav.bar);
+    if (!nav) return null;
+    const here = location.pathname + location.search;
+    let best = null;
+
+    for (const a of nav.querySelectorAll("a[href]")) {
+      let url;
+      try {
+        url = new URL(a.getAttribute("href"), location.origin);
+      } catch {
+        continue;
+      }
+      if (url.host && url.host !== location.host) continue;
+      const target = url.pathname + url.search;
+      const text = (a.textContent || "").trim();
+      if (!text || text.length > 40) continue;
+
+      // Exact match wins outright; otherwise keep the longest path prefix, so
+      // /bills/list/all resolves to the nav's "Bills".
+      if (target === here) return text;
+      if (here.startsWith(url.pathname) && (!best || url.pathname.length > best.len)) {
+        best = { text, len: url.pathname.length };
+      }
+    }
+    return best ? best.text : null;
+  },
+
+  labelFromTitle() {
+    // Dropping the brand leaves the page name first in both formats; the
+    // organisation name is never first, so it needs no special handling.
+    const parts = document.title
+      .split(/\s*[|–—]\s*/)
+      .map((s) => s.trim())
+      .filter((s) => s && s !== "Xero");
+    return parts[0] || null;
   },
 
   destroy() {
