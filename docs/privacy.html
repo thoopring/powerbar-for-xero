@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Privacy Policy — PowerBar for Xero</title>
+  <link rel="icon" href="icon.png" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <img src="icon.png" alt="" />
+    <strong><a href="index.html" style="color:inherit;text-decoration:none">PowerBar for Xero</a></strong>
+    <nav>
+      <a href="terms.html">Terms</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="refund.html">Refunds</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1>Privacy Policy</h1>
+  <p class="lede">Last updated: 4 August 2026</p>
+
+  <p><strong>The short version: nothing you do ever leaves your browser.</strong></p>
+  <p>
+    PowerBar for Xero runs entirely inside your browser as a content script on
+    <code>xero.com</code> pages.
+  </p>
+
+  <h2>What we collect</h2>
+  <p>Nothing. The extension:</p>
+  <ul>
+    <li>sends no analytics, telemetry, or crash reports;</li>
+    <li>reads no accounting data off the page for any purpose other than
+      rendering its own interface locally &mdash; for example, building a filename
+      from the invoice number shown on screen;</li>
+    <li>transmits no page content, keystrokes, or browsing activity anywhere.</li>
+  </ul>
+  <p>We do not have a server. There is nowhere for such data to go.</p>
+
+  <h2>What is stored, and where</h2>
+  <ul>
+    <li>Your settings &mdash; which features are on, your pinned pages, your filename
+      template &mdash; are stored in Chrome's extension storage. If you have Chrome
+      sync enabled, Chrome syncs them to your own Google profile. We never see
+      them.</li>
+    <li>If you buy Pro, your licence key is stored locally and validated against
+      the Lemon Squeezy licensing API. The only data sent in that request is the
+      licence key itself. Lemon Squeezy is our payment provider and Merchant of
+      Record; their privacy policy covers their handling of your purchase
+      details.</li>
+    <li>The extension periodically fetches a small status file from GitHub that
+      lets us switch off a feature remotely if a Xero interface change breaks
+      it. This is a plain file download; no data about you is sent with it
+      beyond a standard HTTP request.</li>
+  </ul>
+
+  <h2>Permissions</h2>
+  <p>
+    The extension requests access to <code>https://*.xero.com/*</code> only. It
+    cannot read or modify any other website.
+  </p>
+  <p>
+    Access to your downloads is an <em>optional</em> permission. It is requested
+    only if you switch on custom invoice PDF filenames, and it is handed back
+    when you switch that feature off. It never appears in the install prompt.
+  </p>
+
+  <h2>Children</h2>
+  <p>The extension is a business tool and is not directed at children.</p>
+
+  <h2>Changes</h2>
+  <p>
+    If this policy changes, the date above changes and the change is recorded in
+    the public repository's history, so you can see exactly what changed and
+    when.
+  </p>
+
+  <h2>Not affiliated with Xero</h2>
+  <p>
+    PowerBar for Xero is an independent product. It is not affiliated with,
+    endorsed by, or sponsored by Xero Limited. Xero is a trademark of Xero
+    Limited.
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    Questions, or anything here that does not match what you observe:
+    <a href="https://github.com/thoopring/powerbar-for-xero/issues">github.com/thoopring/powerbar-for-xero/issues</a>
+  </p>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <nav>
+      <a href="terms.html">Terms of Service</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="refund.html">Refund Policy</a>
+      <a href="https://github.com/thoopring/powerbar-for-xero">Source</a>
+    </nav>
+    <div>&copy; 2026 PowerBar for Xero.</div>
+  </div>
+</footer>
+
+</body>
+</html>
