@@ -1,0 +1,4 @@
+{
+  "_comment": "Remote kill-switch. Host this file publicly (GitHub raw) and point background.js KILLSWITCH_URL at it. Add a module id to 'disabled' to remotely switch that module off for all users (e.g. after a Xero UI refresh breaks it).",
+  "disabled": []
+}

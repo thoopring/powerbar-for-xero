@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <!-- Outside Xero this popup is the "Open Xero" surface (HANDOFF §5-2 #3);
+       on xero.com it becomes a quick module toggle list. -->
+  <div id="off-xero" hidden>
+    <p>This extension lives inside the Xero web app.</p>
+    <a class="cta" href="https://go.xero.com/app/" target="_blank" rel="noopener">Open Xero</a>
+  </div>
+  <div id="on-xero" hidden>
+    <div id="modules"></div>
+    <button id="open-options">All settings…</button>
+  </div>
+  <script src="../src/catalog.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

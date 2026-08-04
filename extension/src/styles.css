@@ -1,0 +1,95 @@
+/* Injected UI. Design rule (HANDOFF §5-2): native camouflage — follow Xero's
+ * font/color/spacing so injected items look like Xero shipped them.
+ * Token values below are provisional; verify against live Xero during
+ * selector capture and mirror their computed styles. */
+
+.xt-menu-item {
+  display: block;
+  padding: 8px 16px;
+  font: inherit;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.xt-menu-item:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.xt-submenu-item {
+  padding-left: 32px;
+  font-size: 0.92em;
+}
+
+/* Reads as a toolbar attached under Xero's nav rather than a stray gap in the
+   page: solid surface, hairline rule, same gutter as the nav above it. */
+.xt-favbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  align-items: center;
+  padding: 3px 20px;
+  background: #fff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.xt-fav-wrap {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 4px;
+}
+
+.xt-fav-wrap:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.xt-fav {
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  font: inherit;
+  font-size: 0.9em;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.xt-fav-add:hover,
+.xt-fav-remove:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+/* Stays out of the way until the row is hovered, so the bar reads as a list of
+   links rather than a row of controls. */
+.xt-fav-remove {
+  padding: 0 6px 0 0;
+  border: none;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.1s;
+}
+
+.xt-fav-wrap:hover .xt-fav-remove,
+.xt-fav-remove:focus {
+  opacity: 0.6;
+}
+
+.xt-fav-add {
+  opacity: 0.55;
+}
+
+/* The first-run call to action. Quiet enough not to compete with Xero's own
+   controls, legible enough to be found. */
+.xt-fav-empty {
+  font-size: 0.85em;
+  opacity: 0.6;
+}
+
+.xt-fav-empty:hover {
+  opacity: 1;
+}
