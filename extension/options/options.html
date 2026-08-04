@@ -2,22 +2,35 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>Settings</title>
+  <title>PowerBar for Xero — settings</title>
   <link rel="stylesheet" href="options.css" />
 </head>
 <body>
-  <h1>Modules</h1>
+  <h1>Features</h1>
   <p class="hint">Every feature can be switched off individually.</p>
   <div id="modules"></div>
 
-  <h1>Pro license</h1>
-  <p class="hint">Pro features need a license key. Nothing else ever leaves your browser.</p>
+  <h1>Pro</h1>
+  <p class="hint" id="pro-blurb">
+    Pro adds custom invoice PDF filenames. One licence, up to three browsers.
+  </p>
+
+  <div id="pro-state" class="state"></div>
+
   <div class="license-row">
-    <input id="license-key" type="text" placeholder="XXXX-XXXX-XXXX-XXXX" spellcheck="false" />
+    <input id="license-key" type="text" placeholder="Paste your licence key" spellcheck="false" autocomplete="off" />
     <button id="license-save">Activate</button>
   </div>
   <p id="license-status"></p>
 
+  <p class="hint">
+    <a id="buy-link" href="#" target="_blank" rel="noopener">Get a licence</a>
+    &middot;
+    <button id="license-remove" class="linkish" type="button">Remove from this browser</button>
+  </p>
+
+  <script src="../config.js"></script>
+  <script src="../src/core/license-rules.js"></script>
   <script src="../src/catalog.js"></script>
   <script src="options.js"></script>
 </body>

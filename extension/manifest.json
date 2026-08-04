@@ -15,6 +15,7 @@
     {
       "matches": ["https://*.xero.com/*"],
       "js": [
+        "src/core/license-rules.js",
         "src/core/namespace.js",
         "src/core/selectors.js",
         "src/core/settings.js",

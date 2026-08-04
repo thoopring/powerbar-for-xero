@@ -3,6 +3,8 @@
 // permissions are required (trust story: xero.com is the ONLY host permission).
 "use strict";
 
+importScripts("config.js", "src/core/license-rules.js");
+
 // Remote kill-switch: a static JSON file, shape { "disabled": ["module-id"] }.
 // Served from the public repo so anyone can see exactly what this fetches.
 const KILLSWITCH_URL =
@@ -25,34 +27,112 @@ async function refreshKillswitch() {
   }
 }
 
-// Lemon Squeezy license validation. STUB: store/product IDs pending (owner).
-// Docs: POST https://api.lemonsqueezy.com/v1/licenses/validate (CORS-enabled).
-async function validateLicense(key) {
+// --- Lemon Squeezy licensing -------------------------------------------------
+//
+// Three endpoints: activate claims one of the licence's activation slots and
+// returns an instance id; validate re-checks that instance; deactivate frees
+// the slot. Activating (rather than only validating) is what makes the
+// "3 browsers" limit real.
+//
+// Requests are form-encoded on purpose. A JSON content type would trigger a
+// CORS preflight that the Lemon Squeezy API does not need to answer, and a
+// failed preflight looks exactly like a rejected licence.
+const LS_API = "https://api.lemonsqueezy.com/v1/licenses";
+
+async function lsPost(path, fields) {
+  const res = await fetch(`${LS_API}/${path}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded", Accept: "application/json" },
+    body: new URLSearchParams(fields).toString(),
+  });
+  // Rejections come back as 400 with a JSON body, so parse either way.
+  return res.json();
+}
+
+function instanceName() {
+  // Shown in the customer's Lemon Squeezy licence page so they can tell which
+  // activation to release.
+  const ua = navigator.userAgent || "";
+  const os = /Windows/.test(ua) ? "Windows" : /Mac/.test(ua) ? "macOS" : /Linux/.test(ua) ? "Linux" : "Browser";
+  return `PowerBar (${os})`;
+}
+
+async function activateLicense(key) {
   if (!key) {
-    await chrome.storage.local.remove("license");
-    return { valid: false };
+    await deactivateLicense();
+    return { ok: false, reason: "none" };
   }
   try {
-    const res = await fetch("https://api.lemonsqueezy.com/v1/licenses/validate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify({ license_key: key }),
-    });
-    const data = await res.json();
-    const valid = !!data.valid; // TODO: also pin store_id/product_id once created
-    await chrome.storage.local.set({
-      license: { key, valid, fresh: true, checkedAt: Date.now() },
-    });
-    return { valid };
-  } catch {
-    // Network failure: mark stale but keep prior verdict for the grace window.
-    const { license } = await chrome.storage.local.get("license");
-    if (license && license.key === key) {
-      await chrome.storage.local.set({ license: { ...license, fresh: false } });
-      return { valid: license.valid };
+    const data = await lsPost("activate", { license_key: key, instance_name: instanceName() });
+    const verdict = XT_LICENSE_RULES.verdict(data, XT_CONFIG);
+    if (!verdict.ok) {
+      await chrome.storage.local.set({
+        license: { key, ok: false, reason: verdict.reason, checkedAt: Date.now(), fresh: true },
+      });
+      return verdict;
     }
-    return { valid: false, offline: true };
+    await chrome.storage.local.set({
+      license: {
+        key,
+        ok: true,
+        reason: "valid",
+        instanceId: data.instance?.id || null,
+        status: verdict.status,
+        expiresAt: verdict.expiresAt,
+        activationLimit: verdict.activationLimit,
+        activationUsage: verdict.activationUsage,
+        checkedAt: Date.now(),
+        fresh: true,
+      },
+    });
+    return verdict;
+  } catch {
+    return { ok: false, reason: "offline" };
   }
+}
+
+async function revalidateLicense(force = false) {
+  const { license } = await chrome.storage.local.get("license");
+  if (!license?.key) return;
+  if (!force && !XT_LICENSE_RULES.needsRecheck(license)) return;
+  try {
+    const data = await lsPost("validate", {
+      license_key: license.key,
+      ...(license.instanceId ? { instance_id: license.instanceId } : {}),
+    });
+    const verdict = XT_LICENSE_RULES.verdict(data, XT_CONFIG);
+    await chrome.storage.local.set({
+      license: {
+        ...license,
+        ok: verdict.ok,
+        reason: verdict.reason,
+        status: verdict.status ?? license.status,
+        expiresAt: verdict.expiresAt ?? license.expiresAt,
+        activationUsage: verdict.activationUsage ?? license.activationUsage,
+        checkedAt: Date.now(),
+        fresh: true,
+      },
+    });
+  } catch {
+    // Offline: keep the previous verdict but mark it stale so the grace window
+    // starts counting rather than silently extending forever.
+    await chrome.storage.local.set({ license: { ...license, fresh: false } });
+  }
+}
+
+async function deactivateLicense() {
+  const { license } = await chrome.storage.local.get("license");
+  if (license?.key && license.instanceId) {
+    // Best effort: if this fails the customer can still release the slot from
+    // their Lemon Squeezy licence page.
+    try {
+      await lsPost("deactivate", {
+        license_key: license.key,
+        instance_id: license.instanceId,
+      });
+    } catch {}
+  }
+  await chrome.storage.local.remove("license");
 }
 
 // --- invoice PDF renaming (Pro, module invoice-filename) -------------------
@@ -122,8 +202,12 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
     refreshKillswitch().then(() => sendResponse({ ok: true }));
     return true;
   }
-  if (msg?.type === "license:validate") {
-    validateLicense(msg.key).then(sendResponse);
+  if (msg?.type === "license:activate") {
+    activateLicense(msg.key).then(sendResponse);
+    return true;
+  }
+  if (msg?.type === "license:deactivate") {
+    deactivateLicense().then(() => sendResponse({ ok: true }));
     return true;
   }
   // Content scripts have no chrome.permissions, so they ask through here.
@@ -151,5 +235,11 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
 chrome.permissions.onAdded?.addListener(registerDownloadListener);
 registerDownloadListener();
 
-chrome.runtime.onInstalled.addListener(() => refreshKillswitch());
-chrome.runtime.onStartup.addListener(() => refreshKillswitch());
+chrome.runtime.onInstalled.addListener(() => {
+  refreshKillswitch();
+  revalidateLicense();
+});
+chrome.runtime.onStartup.addListener(() => {
+  refreshKillswitch();
+  revalidateLicense();
+});

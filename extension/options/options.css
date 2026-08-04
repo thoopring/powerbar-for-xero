@@ -60,5 +60,36 @@ h1 {
 
 #license-status {
   font-size: 13px;
+  color: #c81e1e;
+  min-height: 18px;
+}
+
+.state {
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 12px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+
+.state.ok {
+  background: #e7f6ee;
+  color: #076c40;
+}
+
+.state.off {
+  background: #f4f6f8;
+  color: #5b6675;
+  font-weight: 400;
+}
+
+/* A destructive-ish action that should not look like a primary button. */
+.linkish {
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
   color: #667;
+  text-decoration: underline;
+  cursor: pointer;
 }
