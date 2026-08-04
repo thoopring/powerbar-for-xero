@@ -60,6 +60,11 @@ const XT_LICENSE_RULES = {
   // Returns { pro, reason: "valid" | "grace" | "expired" | "none" }.
   standing(stored, now = Date.now()) {
     if (!stored || !stored.key) return { pro: false, reason: "none" };
+    // A record with no verdict at all predates this format (or was written by
+    // hand during testing). Treating it as "not activated yet" rather than
+    // "your licence is invalid" avoids accusing a paying customer of holding a
+    // bad key when we simply have not checked it.
+    if (stored.ok === undefined && !stored.reason) return { pro: false, reason: "none" };
     if (!stored.ok) return { pro: false, reason: stored.reason || "invalid" };
     const age = now - (stored.checkedAt || 0);
     if (stored.fresh && age < this.GRACE_MS) return { pro: true, reason: "valid" };
