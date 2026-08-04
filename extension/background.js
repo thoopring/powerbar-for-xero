@@ -4,8 +4,9 @@
 "use strict";
 
 // Remote kill-switch: a static JSON file, shape { "disabled": ["module-id"] }.
-// PLACEHOLDER — point at the public repo's raw URL once it exists.
-const KILLSWITCH_URL = "https://raw.githubusercontent.com/PLACEHOLDER/killswitch.json";
+// Served from the public repo so anyone can see exactly what this fetches.
+const KILLSWITCH_URL =
+  "https://raw.githubusercontent.com/thoopring/powerbar-for-xero/main/killswitch.json";
 const KILLSWITCH_TTL_MS = 6 * 60 * 60 * 1000; // refresh at most every 6h
 
 async function refreshKillswitch() {

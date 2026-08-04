@@ -44,4 +44,5 @@ Limited.
 
 ## Contact
 
-Questions: thoopring@gmail.com
+Questions, or anything here that does not match what you observe:
+https://github.com/thoopring/powerbar-for-xero/issues
