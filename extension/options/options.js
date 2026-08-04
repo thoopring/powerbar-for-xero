@@ -16,12 +16,18 @@ async function render() {
     box.checked = cfg[mod.id] !== false;
     box.addEventListener("change", async () => {
       // Renaming downloads needs a permission we deliberately keep out of the
-      // install prompt. Ask for it here, at the moment it becomes useful.
-      if (box.checked && mod.needsDownloads) {
-        const ok = await chrome.permissions.request({ permissions: ["downloads"] });
-        if (!ok) {
-          box.checked = false;
-          return;
+      // install prompt. Ask for it here, at the moment it becomes useful — and
+      // hand it back the moment it stops being useful, so the permissions list
+      // always matches what the extension is actually doing.
+      if (mod.needsDownloads) {
+        if (box.checked) {
+          const ok = await chrome.permissions.request({ permissions: ["downloads"] });
+          if (!ok) {
+            box.checked = false;
+            return;
+          }
+        } else {
+          await chrome.permissions.remove({ permissions: ["downloads"] });
         }
       }
       chrome.storage.sync.set({ [mod.id]: box.checked });
