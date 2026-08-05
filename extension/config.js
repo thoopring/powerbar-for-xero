@@ -22,9 +22,12 @@ const XT_CONFIG = {
     "https://powerbar.lemonsqueezy.com/checkout/buy/c5a512cd-4190-471d-b5cf-ec1db44ae484",
 
   // Lemon Squeezy issues test-mode keys against the same API; they simply
-  // report test_mode. Set true while filming and verifying so a test key is
-  // accepted, and false before the extension is published.
-  allowTestMode: true,
+  // report test_mode. Off since the store went live (2026-08-05): leaving it
+  // on would let anyone unlock Pro with a free test-mode key.
+  //
+  // Turn it back on ONLY for local verification, and put it back before
+  // packaging. The boot warning below exists so a slip is noisy.
+  allowTestMode: false,
 };
 
 // Service worker (importScripts) and extension pages (<script>) both load this.
