@@ -218,6 +218,11 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
       .catch(() => sendResponse({ granted: false }));
     return true;
   }
+  if (msg?.type === "options:open") {
+    chrome.runtime.openOptionsPage();
+    sendResponse({ ok: true });
+    return;
+  }
   if (msg?.type === "invoice:context") {
     const write = msg.context
       ? chrome.storage.session.set({ [CONTEXT_KEY]: msg.context })

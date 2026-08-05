@@ -95,33 +95,18 @@ XT.register({
   },
 
   preview(template, number, contact) {
-    return template.replace(/\{(\w+)\}/g, (_, k) => ({ number, contact })[k] ?? "");
+    return XT.invoice.fill(template, { number, contact });
   },
 
-  // "Invoice ORC1042" -> "ORC1042"
+  // Shared with the Pro hint so the promise and the delivery cannot drift.
   readNumber() {
-    const el = document.querySelector(XT.selectors.invoice.title);
-    if (!el) return null;
-    const text = el.textContent.trim();
-    return (/([A-Z0-9][A-Z0-9-]*\d)\s*$/.exec(text) || [])[1] || text || null;
+    return XT.invoice.number();
   },
 
-  // The name sits on the <button> right after the "Contact" caption. Reading
-  // the caption's parent instead picks up the address block as well, which is
-  // how this produced "Ridgeway UniversityNo address" the first time round.
-  //
   // Anything implausible returns null and the download keeps Xero's own name:
   // a wrong filename is worse than the default one.
   readContact() {
-    const label = document.querySelector(XT.selectors.invoice.contactLabel);
-    if (!label) return null;
-    const next = label.nextElementSibling;
-    const el =
-      next && next.tagName === "BUTTON" ? next : label.parentElement?.querySelector("button");
-    const name = (el?.textContent || "").trim();
-    if (!name || name.length > 80 || name.includes("\n")) return null;
-    if (name === label.textContent.trim()) return null;
-    return name;
+    return XT.invoice.contact();
   },
 
   // Deliberately does NOT clear the published context.

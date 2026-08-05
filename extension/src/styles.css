@@ -93,3 +93,54 @@
 .xt-fav-empty:hover {
   opacity: 1;
 }
+
+/* Pro hint. Appears once, ever, right after an invoice PDF is downloaded.
+   Deliberately not styled as an ad: same surface and type as Xero's own
+   notices, bottom-right so it never covers the page you are working on. */
+.xt-hint {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 2147483000;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  max-width: 560px;
+  padding: 14px 14px 14px 18px;
+  border-radius: 10px;
+  background: #1d2430;
+  color: #fff;
+  font: 13px/1.45 inherit;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.xt-hint-body { flex: 1; min-width: 0; }
+.xt-hint-line { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.xt-hint-muted { color: #a9b4c4; }
+.xt-hint-old { color: #a9b4c4; text-decoration: line-through; }
+.xt-hint-new { color: #ff8a3d; }
+
+.xt-hint-cta {
+  flex: none;
+  padding: 7px 14px;
+  border: 0;
+  border-radius: 6px;
+  background: #ff8a3d;
+  color: #241202;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.xt-hint-close {
+  flex: none;
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  color: #a9b4c4;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.xt-hint-close:hover { color: #fff; }

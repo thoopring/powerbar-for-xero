@@ -21,6 +21,7 @@
         "src/core/settings.js",
         "src/core/dom.js",
         "src/core/menu.js",
+        "src/core/invoice.js",
         "src/core/license.js",
         "src/modules/statements-menu.js",
         "src/modules/purchases-submenu.js",
@@ -30,6 +31,7 @@
         "src/modules/settings-shortcuts.js",
         "src/modules/reconcile-menu.js",
         "src/modules/invoice-filename.js",
+        "src/modules/pro-hint.js",
         "src/main.js"
       ],
       "css": ["src/styles.css"],

@@ -15,10 +15,13 @@ XT.settings = {
     "favorites-bar": true,
     "settings-shortcuts": true,
     "reconcile-menu": true,
+    "pro-hint": true,
     "invoice-filename": true, // Pro — defaults on; the licence gate decides
     // user prefs
     favorites: [],                // [{label, url}]
     filenameTemplate: "{number} - {contact}.pdf",
+    // Set the first time the Pro hint appears; it never appears again.
+    proHintSeen: false,
   },
 
   async load() {
