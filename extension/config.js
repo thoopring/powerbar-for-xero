@@ -29,3 +29,13 @@ const XT_CONFIG = {
 
 // Service worker (importScripts) and extension pages (<script>) both load this.
 if (typeof globalThis !== "undefined") globalThis.XT_CONFIG = XT_CONFIG;
+
+// Shipping with test mode on would let anyone unlock Pro with a free
+// test-mode key. It is one boolean and easy to forget, so it says so loudly
+// rather than failing quietly in a paying customer's favour.
+if (XT_CONFIG.allowTestMode) {
+  console.warn(
+    "[XT] allowTestMode is ON — test-mode licence keys will unlock Pro. " +
+      "Set it to false in extension/config.js before publishing."
+  );
+}
