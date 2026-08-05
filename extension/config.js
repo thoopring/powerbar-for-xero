@@ -14,12 +14,15 @@ const XT_CONFIG = {
 
   // Product page → the product's ID (a number). Both variants (monthly and
   // yearly) share it, which is why the variant is not pinned — pinning it
-  // would reject a yearly customer the day that variant is added.
-  productId: 1266641,
+  // would reject a yearly customer.
+  //
+  // This is the LIVE product (2026-08-05). The earlier 1266641 belonged to the
+  // product built in test mode and no longer applies.
+  productId: 1268800,
 
   // Products → the product → Share → checkout link.
   checkoutUrl:
-    "https://powerbar.lemonsqueezy.com/checkout/buy/c5a512cd-4190-471d-b5cf-ec1db44ae484",
+    "https://powerbar.lemonsqueezy.com/checkout/buy/c3aa2093-1967-4ad3-bc62-705b8bd22dd5",
 
   // Lemon Squeezy issues test-mode keys against the same API; they simply
   // report test_mode. Off since the store went live (2026-08-05): leaving it
