@@ -11,6 +11,7 @@ const XT_CATALOG = [
   { id: "settings-shortcuts", tier: "free", title: "Settings shortcuts" },
   { id: "reconcile-menu", tier: "free", title: "Reconcile shortcuts in menu" },
   { id: "pro-hint", tier: "free", title: "Tell me once about Pro" },
+  { id: "review-request", tier: "free", title: "Ask me once for a review" },
   {
     id: "invoice-filename",
     tier: "pro",

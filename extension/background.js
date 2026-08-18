@@ -240,9 +240,14 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
 chrome.permissions.onAdded?.addListener(registerDownloadListener);
 registerDownloadListener();
 
-chrome.runtime.onInstalled.addListener(() => {
+chrome.runtime.onInstalled.addListener((details) => {
   refreshKillswitch();
   revalidateLicense();
+  // The review ask waits on this. Only stamped on a fresh install, so an
+  // update does not reset someone's clock back to day zero.
+  if (details.reason === "install") {
+    chrome.storage.local.set({ installedAt: Date.now() });
+  }
 });
 chrome.runtime.onStartup.addListener(() => {
   refreshKillswitch();

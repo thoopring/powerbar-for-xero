@@ -32,6 +32,7 @@
         "src/modules/reconcile-menu.js",
         "src/modules/invoice-filename.js",
         "src/modules/pro-hint.js",
+        "src/modules/review-request.js",
         "src/main.js"
       ],
       "css": ["src/styles.css"],

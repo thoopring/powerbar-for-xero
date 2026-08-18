@@ -16,12 +16,15 @@ XT.settings = {
     "settings-shortcuts": true,
     "reconcile-menu": true,
     "pro-hint": true,
+    "review-request": true,
     "invoice-filename": true, // Pro — defaults on; the licence gate decides
     // user prefs
     favorites: [],                // [{label, url}]
     filenameTemplate: "{number} - {contact}.pdf",
     // Set the first time the Pro hint appears; it never appears again.
     proHintSeen: false,
+    // Set once the review ask has happened, however it was answered.
+    reviewAsked: false,
   },
 
   async load() {

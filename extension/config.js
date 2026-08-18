@@ -24,6 +24,9 @@ const XT_CONFIG = {
   checkoutUrl:
     "https://powerbar.lemonsqueezy.com/checkout/buy/c3aa2093-1967-4ad3-bc62-705b8bd22dd5",
 
+  // Chrome Web Store item id, used to link at the listing's review form.
+  extensionId: "ifdmpicajpelfajmjhgclbopnagcnelc",
+
   // Lemon Squeezy issues test-mode keys against the same API; they simply
   // report test_mode. Off since the store went live (2026-08-05): leaving it
   // on would let anyone unlock Pro with a free test-mode key.
