@@ -2,8 +2,9 @@
 
 Menu shortcuts for the Xero web app, as a Chrome extension.
 
-Every feature here comes from a request on Xero's own product ideas forum,
-where the votes have been sitting under "Gaining Support" for years.
+Every feature here comes from a request on Xero's own product ideas forum. The
+seven free ones hold 567 votes between them and are all still marked "Gaining
+Support" — the oldest open since July 2025.
 
 **This repository exists so you can check the extension before installing it.**
 Bookkeepers work in client books; an extension in that browser should not have

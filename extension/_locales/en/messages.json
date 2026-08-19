@@ -4,7 +4,7 @@
     "description": "Extension name. Confirmed by owner 2026-08-04 after trademark review (docs/research/xero-trademark-naming-20260803.md)."
   },
   "extDescription": {
-    "message": "Navigation shortcuts, favorites bar and productivity fixes for the Xero web app. No data collection, xero.com permission only.",
+    "message": "Navigation shortcuts Xero never shipped. Status submenus, Statements in the menu, a favourites bar. No data collection.",
     "description": "Store/short description. Keep under 132 chars for CWS."
   }
 }
