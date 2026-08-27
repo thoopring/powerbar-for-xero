@@ -61,6 +61,10 @@ XT.register({
       })
     );
 
+    // Belt and braces: the registry serialises init(), but this bar is the
+    // full-width one, so a stray duplicate is the most visible failure the
+    // product can have. Never leave two.
+    for (const stale of document.querySelectorAll(".xt-favbar")) stale.remove();
     nav.after(this._bar);
   },
 

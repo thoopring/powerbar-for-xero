@@ -23,6 +23,49 @@ var XT = globalThis.XT || {
       console.warn("[XT] invalid module registration", mod);
       return;
     }
+
+    // Every init() awaits (waiting for Xero's markup, reading settings) before
+    // it touches the page, so a guard written inside the module runs after the
+    // await and cannot stop a second call that got there first. Two overlapping
+    // calls then both insert, and because each one overwrites the module's
+    // reference to what it built, the earlier node is orphaned in the page with
+    // nothing left pointing at it. That is how the favourites bar grew a new
+    // row on every pin.
+    //
+    // Overlapping calls are routine: pinning a page writes settings, which
+    // re-inits every module, while an SPA navigation may be doing the same.
+    const rawInit = mod.init.bind(mod);
+    const rawDestroy = mod.destroy.bind(mod);
+    let running = false;
+    let queued = false;
+
+    mod.init = async function guardedInit() {
+      // Re-entrant calls are remembered rather than dropped: the second one
+      // usually means the page changed under us, so its work still has to
+      // happen — just not at the same time.
+      if (running) {
+        queued = true;
+        return;
+      }
+      running = true;
+      try {
+        await rawInit();
+      } finally {
+        running = false;
+      }
+      if (queued) {
+        queued = false;
+        await mod.init();
+      }
+    };
+
+    mod.destroy = function guardedDestroy() {
+      rawDestroy();
+      // Sweep by marker, not by stored reference, so anything the module lost
+      // track of still goes. Without this an orphan survives every teardown.
+      for (const n of document.querySelectorAll(`[data-xt-item="${mod.id}"]`)) n.remove();
+    };
+
     this.modules.push(mod);
   },
 };
